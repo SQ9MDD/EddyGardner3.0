@@ -15,13 +15,13 @@ All logic, control and configuration is done through Home Assistant — no codin
 - Custom 3D-printed enclosures designed in Fusion 360
 
 ## Files
-- 📦 ESPHome config: `eddy_gardner_v3.yaml`
+- 📦 ESPHome config: `configuration.yaml`
 - 📎 3D print files (STL): pump mount, sensor housing, electronics case
 
 ## Links
 
 🔧 Blog article:  
-👉 [https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0](https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0)
+👉 [https://hamspirit.pl/SQ9MDD/?p=2861](https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0)
 
 🖨️ 3D models on Printables:  
 👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/en/model/000000-eddy-gardner)
