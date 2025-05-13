@@ -44,4 +44,24 @@ Dozowanie wody realizuje pompka perystaltyczna, a całość kontrolowana jest z 
 - Precyzyjne dawkowanie wody przez pompkę
 - Regulowany interwał, czas podlewania i wilgotność docelowa
 - Zabezpieczenia: sucha gleba, zalanie, błąd czujnika
-- Wygładzanie danych (średnia
+- Wygładzanie danych (średnia ruchoma lub wykładnicza)
+- Integracja z Home Assistant przez natywne API ESPHome
+- Obudowy zaprojektowane w Fusion 360, gotowe do druku 3D
+
+## Pliki
+- 📦 Konfiguracja ESPHome: `eddy_gardner_v3.yaml`
+- 📎 Modele STL: obudowa pompki, czujnika, elektroniki
+
+## Linki
+
+🔧 Wpis na blogu:  
+👉 [https://hamspirit.pl/SQ9MDD/?p=2861](https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0)
+
+🖨️ Projekt na Printables:  
+👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/en/model/000000-eddy-gardner)
+
+---
+
+## Licencja
+
+Projekt objęty licencją MIT. Szczegóły w pliku [`LICENSE`](LICENSE).
