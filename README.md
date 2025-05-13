@@ -3,8 +3,6 @@
 An automatic plant watering system powered by ESPHome, ESP8266/ESP32 and a peristaltic pump.  
 All logic, control and configuration is done through Home Assistant — no coding required.
 
-📌 [Click here to view this README in **Polish / Polski**](#wersja-polska)
-
 ---
 
 ## Features
@@ -26,7 +24,7 @@ All logic, control and configuration is done through Home Assistant — no codin
 👉 [https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0](https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0)
 
 🖨️ 3D models on Printables:  
-👉 [https://www.printables.com/en/model/000000-eddy-gardner](https://www.printables.com/en/model/000000-eddy-gardner)
+👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/en/model/000000-eddy-gardner)
 
 ---
 
