@@ -1,1 +1,190 @@
+esphome:
+  name: esphome-web-b4d4e7
+  friendly_name: EddyGardner1
+  min_version: 2024.11.0
+  name_add_mac_suffix: false
 
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+captive_portal:
+
+
+globals:
+  - id: watering_countdown
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  - id: pump_runtime
+    type: int
+    restore_value: no
+    initial_value: '0'    
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "IP"
+    ssid:
+      name: "SSID"
+    mac_address:
+      name: "MAC" 
+
+sensor:
+  - platform: uptime
+    name: Uptime Sensor
+
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    filters:
+    - sliding_window_moving_average:
+        window_size: 15
+        send_every: 15    
+    update_interval: 60s
+
+  - platform: adc
+    pin: A0
+    name: "Wilgotność gleby"
+    id: soil_moisture
+    update_interval: 60s
+    force_update: True
+    filters:
+      - lambda: |-
+          float wet = 0.287;
+          float dry = 0.708;
+          float value = (x - wet) / (dry - wet);  // przeskaluj
+          value = 1.0 - value;                    // odwróć: 1 = mokro
+          value = value * 100.0;                  // na %
+          if (value < 0.0) return 0.0;
+          if (value > 100.0) return 100.0;
+          return value;
+      - exponential_moving_average:
+          alpha: 0.2
+      - heartbeat: 60s
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+
+binary_sensor:
+  - platform: template
+    name: "Alarm: niska wilgotność"
+    id: low_moisture_alarm
+    lambda: |-
+      return id(soil_moisture).state < 40;
+    device_class: moisture
+
+  - platform: template
+    name: "Alarm: zalanie"
+    id: flood_alarm
+    lambda: |-
+      return id(soil_moisture).state > 90;
+    device_class: moisture    
+
+number:
+  - platform: template
+    name: "Zadana wilgotność (%)"
+    id: target_moisture
+    min_value: 0
+    max_value: 90
+    step: 1
+    unit_of_measurement: "%"
+    initial_value: 70
+    mode: slider
+    optimistic: true
+    restore_value: true
+
+  - platform: template
+    name: "Interwał podlewania (minuty)"
+    id: watering_interval
+    min_value: 1
+    max_value: 60
+    step: 1
+    initial_value: 10
+    mode: slider
+    optimistic: true
+    restore_value: true
+    on_value:
+      then:
+        - lambda: |-
+            id(watering_countdown) = (int)x;
+            ESP_LOGI("main", "Zmieniono interwał – ustawiam licznik na %d minut", (int)x);
+
+  - platform: template
+    name: "Czas podlewania (sekundy)"
+    id: watering_time
+    min_value: 10
+    max_value: 90
+    step: 1
+    initial_value: 20
+    mode: slider
+    optimistic: true
+    restore_value: true
+
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: pump_output
+
+switch:
+  - platform: output
+    name: "Pompa"
+    output: pump_output
+    id: pump_switch
+    on_turn_on:
+      then:
+        - lambda: |-
+            if (id(pump_runtime) == 0) {
+              id(pump_runtime) = (int)id(watering_time).state;
+              ESP_LOGI("main", "Pompa włączona ręcznie – odliczam %d sekund", id(pump_runtime));
+            }    
+
+# Co 1 minutę – sprawdź czy trzeba podlewać
+interval:
+  - interval: 60s
+    then:
+      - lambda: |-
+          id(watering_countdown) -= 1;
+          if (id(watering_countdown) <= 0) {
+            id(watering_countdown) = (int)id(watering_interval).state;
+
+            if (id(soil_moisture).state > 1 &&
+                id(soil_moisture).state < id(target_moisture).state) {
+
+              ESP_LOGI("main", "Wilgotność %.1f%% < %.1f%% – włączam pompę",
+                id(soil_moisture).state, id(target_moisture).state);
+
+              id(pump_switch).turn_on();
+              id(pump_runtime) = (int)id(watering_time).state;
+
+            } else {
+              ESP_LOGI("main", "Wilgotność OK (%.1f%%) – nie podlewam",
+                id(soil_moisture).state);
+            }
+          } else {
+            ESP_LOGI("main", "Odliczanie: %d min do kolejnej próby", id(watering_countdown));
+          }
+
+# Co 1 sekundę – jeśli pompka działa, odliczaj i wyłącz
+  - interval: 1s
+    then:
+      - lambda: |-
+          if (id(pump_runtime) > 0) {
+            id(pump_runtime) -= 1;
+            if (id(pump_runtime) == 0) {
+              ESP_LOGI("main", "Czas podlewania minął – wyłączam pompę");
+              id(pump_switch).turn_off();
+            }
+          }
