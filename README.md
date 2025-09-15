@@ -24,7 +24,7 @@ All logic, control and configuration is done through Home Assistant — no codin
 👉 [https://hamspirit.pl/SQ9MDD/?p=2861](https://hamspirit.pl/SQ9MDD/?p=2861)
 
 🖨️ 3D models on Printables:  
-👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/en/model/000000-eddy-gardner)
+👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system)
 
 ---
 
