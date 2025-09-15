@@ -55,7 +55,7 @@ Dozowanie wody realizuje pompka perystaltyczna, a całość kontrolowana jest z 
 ## Linki
 
 🔧 Wpis na blogu:  
-👉 [https://hamspirit.pl/SQ9MDD/?p=2861](https://hamspirit.pl/SQ9MDD/eddy-gardner-3-0)
+👉 [[https://hamspirit.pl/SQ9MDD/?p=2861](https://hamspirit.pl/SQ9MDD/?p=2861)]
 
 🖨️ Projekt na Printables:  
 👉 [https://www.printables.com/model/1291528-eddy-gardner-automatic-plant-watering-system](https://www.printables.com/en/model/000000-eddy-gardner)
